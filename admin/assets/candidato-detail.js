@@ -15,6 +15,10 @@ async function load() {
     return;
   }
   const c = data.candidato;
+  const mailStatus = document.getElementById('emailDeliveryStatus');
+  if (mailStatus) mailStatus.textContent = c.email_status === 'enviado' ? `Notificação enviada em ${fmtDate(c.email_enviado_em)}.` : (c.email_status === 'falhou' ? 'Envio pendente ou com falha. O perfil continua salvo no painel.' : 'Notificação ainda não enviada.');
+  const resend = document.getElementById('resendEmailBtn');
+  if (resend) resend.onclick = async () => { resend.disabled = true; resend.textContent = 'Enviando…'; const result = await api(`/admin/api/candidatos/${id}/email`, { method:'POST' }); if (result.data && result.data.ok) { toast('Perfil e currículo enviados por e-mail.', 'ok'); await load(); } else toast((result.data && result.data.error) || 'Não foi possível enviar.', 'err'); resend.disabled = false; resend.textContent = 'Reenviar perfil e currículo por e-mail'; };
   document.title = `${c.nome} | Painel — Primeiro Passo X`;
   document.getElementById('protocoloLabel').textContent = c.protocolo;
   document.getElementById('candNome').textContent = c.nome;

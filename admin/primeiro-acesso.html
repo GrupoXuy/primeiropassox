@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Primeiro acesso | Primeiro Passo X</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body class="login-page">
+<main class="login-card" aria-labelledby="setupTitle">
+  <img src="../assets/img/logo.jpeg" alt="Primeiro Passo X" width="88" height="88">
+  <span class="setup-eyebrow">Acesso seguro</span>
+  <h1 id="setupTitle">Criar senha do administrador</h1>
+  <p id="setupIntro">Informe o e-mail autorizado. Enviaremos um link de ativação para criar sua senha.</p>
+  <form id="requestSetupForm" novalidate>
+    <label for="setupEmail">E-mail do administrador</label>
+    <input id="setupEmail" type="email" autocomplete="email" required value="primeiropassorecrutamento@gmail.com" readonly>
+    <div class="login-error" id="requestError" role="alert"></div>
+    <button type="submit" class="adm-btn solid setup-submit" id="requestBtn">Enviar link de primeiro acesso</button>
+  </form>
+  <form id="setPasswordForm" hidden novalidate>
+    <label for="newPassword">Nova senha</label>
+    <input id="newPassword" type="password" autocomplete="new-password" minlength="10" required placeholder="Mínimo 10 caracteres">
+    <label for="confirmPassword">Confirmar senha</label>
+    <input id="confirmPassword" type="password" autocomplete="new-password" minlength="10" required placeholder="Repita a nova senha">
+    <div class="login-error" id="passwordError" role="alert"></div>
+    <button type="submit" class="adm-btn solid" style="width:100%;justify-content:center;padding:.75rem;font-size:.9rem;margin-top:1.1rem" id="passwordBtn">Criar senha</button>
+  </form>
+  <p class="login-note"><a href="/admin/login.html" class="setup-back">← Voltar ao login</a></p>
+</main>
+<script src="assets/primeiro-acesso.js"></script>
+</body></html>

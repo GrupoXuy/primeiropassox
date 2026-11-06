@@ -15,9 +15,10 @@ const {
   listCandidatos, listTodosCandidatos, getCandidato, getDetalhes,
   setStatus, addObservacao,
   uploadCv, downloadCv, removeCv, deleteCandidato, getCvMeta,
-  getAdminByEmail, getAdminById, updateAdminSenha, logAdmin, listLogs
+  getAdminByEmail, getAdminById, createOrRefreshAdminSetup, completeAdminSetup, updateAdminSenha, logAdmin, listLogs, setCandidateEmailStatus
 } = require('./repo');
 const { STATUS_LABELS, STATUS_LIST, validateCandidato, VERSAO_CONSENTIMENTO } = require('./validate');
+const { ADMIN_EMAIL, isMailConfigured, sendCandidateNotification, sendAdminSetupLink } = require('./mailer');
 const {
   createSessionCookie, clearSessionCookie,
   requireAdminPage, requireAdminApi, requireFetchHeader, rateLimit
@@ -50,6 +51,8 @@ const csvEscape = (v) => {
 };
 const asyncRoute = (handler) => (req, res, next) => Promise.resolve(handler(req, res, next)).catch(next);
 const isPdfBuffer = (buf) => buf && buf.length > 5 && buf.subarray(0, 5).toString('utf8') === '%PDF-';
+const sha256 = (value) => crypto.createHash('sha256').update(String(value)).digest('hex');
+const strongPassword = (value) => value.length >= 10 && /[a-z]/.test(value) && /[A-Z]/.test(value) && /[0-9]/.test(value);
 
 /* ---------- Upload de currículo: PDF ≤ 4 MB, em memória ---------- */
 const upload = multer({
@@ -99,7 +102,18 @@ app.post('/api/candidatos',
         { ...data, ip: ip || null, userAgent: (req.headers['user-agent'] || '').slice(0, 300) || null },
         cvFilename ? { filename: cvFilename, originalName: cvOriginalName } : null
       );
-      res.status(201).json({ ok: true, protocolo: protocol(id) });
+      let emailEnviado = false;
+      let emailErro = null;
+      try {
+        if (!isMailConfigured()) throw new Error('SMTP não configurado.');
+        await sendCandidateNotification({ ...data, protocolo: protocol(id) }, req.file ? req.file.buffer : null, cvOriginalName);
+        emailEnviado = true;
+      } catch (mailError) {
+        emailErro = mailError.message;
+        console.error('[candidatos] notificação por e-mail pendente:', mailError.message);
+      }
+      await setCandidateEmailStatus(id, emailEnviado ? 'enviado' : 'falhou', emailErro).catch((e) => console.error('[candidatos] status de e-mail:', e.message));
+      res.status(201).json({ ok: true, protocolo: protocol(id), emailEnviado });
     } catch (error) {
       if (cvFilename) await removeCv(cvFilename);
       console.error('[candidatos] erro ao salvar:', error.message);
@@ -111,6 +125,50 @@ app.post('/api/candidatos',
 /* ============================================================
    API ADMINISTRATIVA — autenticação
    ============================================================ */
+app.post('/admin/api/primeiro-acesso/solicitar',
+  requireFetchHeader,
+  rateLimit({ windowMs: 15 * 60 * 1000, max: 3, message: 'Muitas solicitações. Aguarde 15 minutos.' }),
+  asyncRoute(async (req, res) => {
+    const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 160);
+    const generic = () => res.status(202).json({ ok: true, message: 'Se o endereço estiver autorizado, enviaremos um link para criar a senha.' });
+    if (email !== ADMIN_EMAIL) return generic();
+    if (!isMailConfigured()) return res.status(503).json({ ok: false, error: 'O envio de e-mail ainda não está configurado. Contate o responsável técnico.' });
+    const token = crypto.randomBytes(32).toString('base64url');
+    const placeholderHash = bcrypt.hashSync(crypto.randomBytes(32).toString('hex'), 12);
+    const admin = await createOrRefreshAdminSetup({
+      nome: process.env.ADMIN_NAME || 'Administrador Primeiro Passo X', email,
+      senhaHash: placeholderHash, tokenHash: sha256(token),
+      expiresAt: new Date(Date.now() + 20 * 60 * 1000).toISOString()
+    });
+    if (!admin || admin.alreadyConfigured) return generic();
+    try {
+      await sendAdminSetupLink(email, token);
+      await logAdmin({ adminId: admin.id, acao: 'admin_ativacao_solicitada', detalhes: 'Link de primeiro acesso enviado' });
+    } catch (mailError) {
+      console.error('[admin setup] falha ao enviar link:', mailError.message);
+      return res.status(503).json({ ok: false, error: 'Não foi possível enviar o link. Verifique a configuração de e-mail e tente novamente.' });
+    }
+    return generic();
+  })
+);
+
+app.post('/admin/api/primeiro-acesso/concluir',
+  requireFetchHeader,
+  rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Muitas tentativas. Solicite um novo link.' }),
+  asyncRoute(async (req, res) => {
+    const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 160);
+    const token = String((req.body || {}).token || '');
+    const senha = String((req.body || {}).senha || '');
+    if (email !== ADMIN_EMAIL || token.length < 32 || !strongPassword(senha)) {
+      return res.status(400).json({ ok: false, error: 'Link inválido ou expirado, ou senha fora dos requisitos.' });
+    }
+    const admin = await completeAdminSetup(email, sha256(token), bcrypt.hashSync(senha, 12));
+    if (!admin) return res.status(400).json({ ok: false, error: 'Link inválido ou expirado. Solicite um novo link de primeiro acesso.' });
+    await logAdmin({ adminId: admin.id, acao: 'admin_criado', detalhes: 'Senha definida no primeiro acesso' });
+    res.json({ ok: true, message: 'Senha criada. Você já pode entrar.' });
+  })
+);
+
 app.post('/admin/api/login',
   requireFetchHeader,
   rateLimit({ windowMs: 5 * 60 * 1000, max: 5, message: 'Muitas tentativas de login. Aguarde 5 minutos.' }),
@@ -120,7 +178,7 @@ app.post('/admin/api/login',
     const fail = () => res.status(401).json({ ok: false, error: 'E-mail ou senha incorretos.' });
     if (!email || !senha) return fail();
     const user = await getAdminByEmail(email);
-    if (!user || !bcrypt.compareSync(senha, user.senha_hash)) return fail();
+    if (!user || !user.senha_definida_em || !bcrypt.compareSync(senha, user.senha_hash)) return fail();
     await logAdmin({ adminId: user.id, acao: 'login', detalhes: 'Login administrativo', ip: clientIp(req) });
     res.set('Set-Cookie', createSessionCookie(user));
     res.json({ ok: true, nome: user.nome, email: user.email });
@@ -231,6 +289,24 @@ app.get('/admin/api/candidatos/:id/curriculo', requireAdminApi, asyncRoute(async
   res.send(pdf);
 }));
 
+app.post('/admin/api/candidatos/:id/email', requireFetchHeader, requireAdminApi, asyncRoute(async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const candidato = Number.isInteger(id) ? await getCandidato(id) : null;
+  if (!candidato) return res.status(404).json({ ok: false, error: 'Candidato não encontrado.' });
+  try {
+    if (!isMailConfigured()) throw new Error('SMTP não configurado.');
+    const cv = candidato.cv_filename ? await downloadCv(candidato.cv_filename) : null;
+    await sendCandidateNotification(candidato, cv, candidato.cv_original_name);
+    await setCandidateEmailStatus(id, 'enviado', null);
+    await logAdmin({ adminId: req.admin.id, acao: 'email_candidato_reenviado', detalhes: `Notificação do candidato #${id} reenviada`, candidatoId: id, ip: clientIp(req) });
+    res.json({ ok: true });
+  } catch (mailError) {
+    await setCandidateEmailStatus(id, 'falhou', mailError.message).catch(() => {});
+    console.error('[admin] falha ao reenviar cadastro:', mailError.message);
+    res.status(503).json({ ok: false, error: 'Não foi possível enviar o e-mail. Verifique a configuração SMTP.' });
+  }
+}));
+
 app.delete('/admin/api/candidatos/:id', requireFetchHeader, requireAdminApi, asyncRoute(async (req, res) => {
   const id = parseInt(req.params.id, 10);
   if (!Number.isInteger(id)) return res.status(400).json({ ok: false, error: 'ID inválido.' });
@@ -266,7 +342,7 @@ app.get('/admin/api/logs', requireAdminApi, asyncRoute(async (req, res) => {
    ============================================================ */
 app.use('/admin', (req, res, next) => {
   /* Arquivos públicos do login: a própria página e os assets compartilhados */
-  if (req.path === '/login.html' || req.path.startsWith('/assets/')) return next();
+  if (req.path === '/login.html' || req.path === '/primeiro-acesso.html' || req.path.startsWith('/assets/')) return next();
   return requireAdminPage(req, res, next);
 });
 

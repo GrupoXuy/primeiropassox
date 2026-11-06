@@ -1,7 +1,4 @@
-/* Primeiro Passo X — Banco de talentos (front-end)
-   IMPORTANTE: enquanto a integração segura (banco de dados + API) não for
-   ativada, este formulário NÃO transmite nem armazena dados. A validação e o
-   "resumo .txt" funcionam de ponta a ponta no navegador do candidato. */
+/* Primeiro Passo X — Cadastro conectado à API segura e ao banco de talentos. */
 (function () {
   'use strict';
 
@@ -181,9 +178,7 @@
       'Autorizo contato por e-mail/telefone/WhatsApp: ' + (form.elements['contato'].checked ? 'SIM' : 'NÃO'),
       'Desejo receber novidades da Primeiro Passo X: ' + (form.elements['novidades'].checked ? 'SIM' : 'NÃO'),
       '',
-      'Observação: este arquivo foi gerado no seu dispositivo. Nenhum dado foi',
-      'transmitido a servidores. A integração segura do banco de talentos será',
-      'ativada na próxima fase do projeto.'
+      'Observação: este resumo foi gerado localmente no seu dispositivo.'
     ];
     return lines.join('\n');
   };
@@ -276,6 +271,8 @@
       if (res.status === 201 && data && data.ok) {
         const sucesso = document.getElementById('cadastroSucesso');
         document.getElementById('sucessoProtocolo').textContent = data.protocolo;
+        const avisoEmail = document.getElementById('emailAviso');
+        if (avisoEmail) avisoEmail.textContent = data.emailEnviado ? 'Seu perfil foi registrado e encaminhado à equipe de recrutamento.' : 'Seu perfil foi registrado com segurança. A equipe poderá consultá-lo na área administrativa.';
         form.hidden = true;
         if (sucesso) { sucesso.hidden = false; sucesso.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
         return;
