@@ -30,7 +30,7 @@ const create = async (senha) => {
   const hash = bcrypt.hashSync(senha, 12);
   const { data: inserted, error: insError } = await supabase
     .from('admin_users')
-    .insert({ nome: nome.trim(), email: normalized, senha_hash: hash, papel: 'admin' })
+    .insert({ nome: nome.trim(), email: normalized, senha_hash: hash, papel: 'admin', senha_definida_em: new Date().toISOString() })
     .select('id').single();
   if (insError) fail('Não foi possível criar o administrador: ' + insError.message);
 
