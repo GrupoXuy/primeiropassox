@@ -1,0 +1,23 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+server/.env.local
+server/.env
+server/.env.*
+!server/.env.example
+
+# Runtime data and uploads
+data/
+uploads/
+*.sqlite
+*.db
+*.db-wal
+*.db-journal
+*.key
+
+# Dependencies and platform
+node_modules/
+.vercel/
+.DS_Store
+npm-debug.log*
