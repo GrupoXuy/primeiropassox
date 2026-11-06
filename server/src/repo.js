@@ -4,7 +4,7 @@
 
 const { supabase, STATUS, CV_BUCKET } = require('./db');
 
-const CAND_FIELDS = 'id, nome, nascimento, email, telefone, pais_residencia, cidade, nacionalidade, experiencia, area, historico, escolaridade, habilidades, idiomas, ingles, linkedin, paises_interesse, disponibilidade_mudanca, disponibilidade_inicio, interesse_vendas, interesse_outras, vaga_interesse, cv_filename, cv_original_name, status, consent_versao, consent_em, contato_autorizado, novidades_opt_in, criado_em, atualizado_em';
+const CAND_FIELDS = 'id, nome, nascimento, email, telefone, pais_residencia, cidade, nacionalidade, experiencia, area, historico, escolaridade, habilidades, idiomas, ingles, linkedin, paises_interesse, disponibilidade_mudanca, disponibilidade_inicio, interesse_vendas, interesse_outras, vaga_interesse, cv_filename, cv_original_name, status, email_status, email_enviado_em, email_erro, consent_versao, consent_em, contato_autorizado, novidades_opt_in, criado_em, atualizado_em';
 
 const sanitizeSearch = (v) => String(v).replace(/[^\p{L}\p{N}@._+ -]/gu, ' ').replace(/\s+/g, ' ').trim().slice(0, 80);
 const ilikeEscape = (v) => String(v).replace(/[%_\\]/g, (m) => '\\' + m);
@@ -126,6 +126,15 @@ async function listTodosCandidatos({ q = {}, limit = 5000 } = {}) {
   return (data || []).map(decorate);
 }
 
+async function setCandidateEmailStatus(id, status, errorMessage = null) {
+  const allowed = ['pendente', 'enviado', 'falhou'];
+  if (!allowed.includes(status)) throw new Error('Status de e-mail inválido.');
+  const patch = { email_status: status, email_erro: errorMessage ? String(errorMessage).slice(0, 500) : null };
+  patch.email_enviado_em = status === 'enviado' ? new Date().toISOString() : null;
+  const { error } = await supabase.from('candidatos').update(patch).eq('id', id);
+  if (error) throw new Error('[candidate email status] ' + error.message);
+}
+
 async function getCandidato(id) {
   const { data, error } = await supabase.from('candidatos').select(CAND_FIELDS).eq('id', id).maybeSingle();
   if (error) throw new Error('[candidato] ' + error.message);
@@ -196,13 +205,13 @@ async function getCvMeta(id) {
 
 /* ---------- Admins e logs ---------- */
 async function getAdminByEmail(email) {
-  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash').eq('email', email).maybeSingle();
+  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash, senha_definida_em').eq('email', email).maybeSingle();
   if (error) throw new Error('[admin por email] ' + error.message);
   return data || null;
 }
 
 async function getAdminById(id) {
-  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash').eq('id', id).maybeSingle();
+  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash, senha_definida_em').eq('id', id).maybeSingle();
   if (error) throw new Error('[admin por id] ' + error.message);
   return data || null;
 }
@@ -212,6 +221,38 @@ async function getAdminEmailsByIds(ids) {
   const { data, error } = await supabase.from('admin_users').select('id, nome').in('id', ids);
   if (error) throw new Error('[admin nomes] ' + error.message);
   return new Map((data || []).map((r) => [r.id, r.nome]));
+}
+
+async function createOrRefreshAdminSetup({ nome, email, senhaHash, tokenHash, expiresAt }) {
+  const { data: existing, error: findError } = await supabase.from('admin_users')
+    .select('id, nome, email, senha_definida_em').eq('email', email).maybeSingle();
+  if (findError) throw new Error('[admin setup lookup] ' + findError.message);
+  if (existing && existing.senha_definida_em) return { alreadyConfigured: true };
+  if (existing) {
+    const { error } = await supabase.from('admin_users').update({
+      setup_token_hash: tokenHash, setup_token_expires_at: expiresAt
+    }).eq('id', existing.id);
+    if (error) throw new Error('[admin setup refresh] ' + error.message);
+    return { id: existing.id, nome: existing.nome, email: existing.email, alreadyConfigured: false };
+  }
+  const { data, error } = await supabase.from('admin_users').insert({
+    nome, email, senha_hash: senhaHash, papel: 'admin',
+    setup_token_hash: tokenHash, setup_token_expires_at: expiresAt
+  }).select('id, nome, email').single();
+  if (error) throw new Error('[admin setup create] ' + error.message);
+  return { ...data, alreadyConfigured: false };
+}
+
+async function completeAdminSetup(email, tokenHash, senhaHash) {
+  const { data, error } = await supabase.from('admin_users').update({
+    senha_hash: senhaHash, senha_definida_em: new Date().toISOString(),
+    setup_token_hash: null, setup_token_expires_at: null
+  }).eq('email', email).eq('setup_token_hash', tokenHash)
+    .gt('setup_token_expires_at', new Date().toISOString())
+    .is('senha_definida_em', null)
+    .select('id, nome, email').maybeSingle();
+  if (error) throw new Error('[admin setup complete] ' + error.message);
+  return data || null;
 }
 
 async function updateAdminSenha(id, senhaHash) {
@@ -243,7 +284,7 @@ module.exports = {
   protocol, safeParseArray,
   cadastrarCandidato, getDashboard, getFiltrosDistintos,
   listCandidatos, listTodosCandidatos, getCandidato, getDetalhes,
-  setStatus, addObservacao,
+  setStatus, addObservacao, setCandidateEmailStatus,
   uploadCv, downloadCv, removeCv, deleteCandidato, getCvMeta,
-  getAdminByEmail, getAdminById, updateAdminSenha, logAdmin, listLogs
+  getAdminByEmail, getAdminById, createOrRefreshAdminSetup, completeAdminSetup, updateAdminSenha, logAdmin, listLogs
 };
