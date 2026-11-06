@@ -2,6 +2,7 @@
 const form = document.getElementById('loginForm');
 const errorBox = document.getElementById('loginError');
 const btn = document.getElementById('loginBtn');
+if (document.getElementById('email')) document.getElementById('email').value = new URLSearchParams(window.location.search).get('email') || '';
 
 function showError(msg) {
   errorBox.textContent = msg;
