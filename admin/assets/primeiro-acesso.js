@@ -39,7 +39,7 @@ setForm.addEventListener('submit', async (e) => {
     document.getElementById('setupTitle').textContent = 'Senha criada com sucesso';
     document.getElementById('setupIntro').textContent = 'Agora você pode entrar na área administrativa.';
     setForm.hidden = true;
-    const link = document.createElement('a'); link.className='adm-btn solid'; link.href='/admin/login.html'; link.textContent='Ir para o login'; link.style.marginTop='1rem'; link.style.display='inline-flex';
+    const link = document.createElement('a'); link.className='adm-btn solid'; link.href='/admin/login.html'; link.textContent='Ir para o login'; link.classList.add('setup-login-link');
     document.querySelector('.login-card').appendChild(link);
   } catch (err) { show(passwordError, err.message || 'Falha de conexão.'); }
   finally { btn.disabled = false; btn.textContent = 'Criar senha'; }
