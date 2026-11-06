@@ -25,13 +25,17 @@ Plataforma institucional e banco de talentos para conectar brasileiros a oportun
 3. Preencha as variáveis do Supabase e um segredo de sessão com pelo menos 32 caracteres.
 4. Aplique `supabase/schema.sql` no SQL Editor do projeto Supabase.
 5. Execute `npm start` e acesse `http://localhost:8080`.
-6. Crie o primeiro administrador pelo terminal: `npm run create-admin -- "Nome" "email@dominio.com"` e informe a senha quando solicitado.
+6. Configure SMTP e solicite o primeiro acesso em `/admin/primeiro-acesso.html`; o link de ativação é enviado somente ao e-mail administrativo autorizado.
 
 ## Variáveis do servidor
 - `SUPABASE_URL`
 - `SUPABASE_SERVICE_ROLE_KEY` (somente servidor; nunca expor no navegador)
 - `ADMIN_SESSION_SECRET` (mínimo 32 caracteres)
 - `SUPABASE_CV_BUCKET` (opcional; padrão `curriculos`)
+- `ADMIN_EMAIL` (e-mail único autorizado a criar a senha no primeiro acesso; padrão `primeiropassorecrutamento@gmail.com`)
+- `ADMIN_NOTIFICATION_EMAIL` (destino das fichas de candidatos; padrão igual a `ADMIN_EMAIL`)
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` (envio SMTP; credenciais somente na Vercel)
+- `APP_BASE_URL` (URL pública usada nos links de ativação; padrão produção)
 - `COOKIE_SECURE=1` em produção HTTPS
 - `PORT` e `HOST` opcionais no desenvolvimento local
 
@@ -40,7 +44,7 @@ Na Vercel, configure essas variáveis no ambiente do projeto. Não coloque crede
 ## Segurança e dados
 - As tabelas do Supabase usam RLS ativado e não possuem policies públicas; o servidor utiliza a chave service_role.
 - O bucket de currículos é privado.
-- Administradores são criados somente pela CLI.
+- O primeiro administrador é ativado por link de uso único, enviado ao e-mail administrativo permitido; a senha é definida no primeiro acesso.
 - Não adicionar candidatos, dados pessoais, currículos, logs ou segredos ao Git.
 - O banco deve iniciar sem candidatos, observações e histórico; não criar dados fictícios.
 - Não publicar vagas sem validação comercial.
