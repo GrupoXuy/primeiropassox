@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Minha conta | Painel — Primeiro Passo X</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+
+<header class="adm-top">
+  <div class="adm-top-inner">
+    <a class="adm-brand" href="/admin/"><img src="../assets/img/logo.jpeg" alt="" width="38" height="38"><span><b>Primeiro Passo X</b>Painel administrativo</span></a>
+    <nav class="adm-nav" aria-label="Navegação do painel">
+      <a href="/admin/">Dashboard</a>
+      <a href="/admin/candidatos.html">Candidatos</a>
+      <a href="/admin/logs.html">Auditoria</a>
+    </nav>
+    <div class="adm-user"><span class="nome">Olá, <b id="adminNome">…</b></span><a class="adm-btn" href="/admin/conta.html" aria-current="page" style="border-color:var(--gold-2);color:var(--gold-2)">Conta</a><button class="adm-btn" id="logoutBtn" type="button">Sair</button></div>
+  </div>
+</header>
+
+<main class="adm-main" style="max-width:620px">
+  <div class="adm-page-head">
+    <div>
+      <span class="eyebrow">Minha conta</span>
+      <h1>Alterar senha</h1>
+      <p>Você está conectado como <b id="adminEmail">…</b>. Recomendamos trocar a senha inicial.</p>
+    </div>
+  </div>
+
+  <form class="adm-panel" id="senhaForm" aria-label="Formulário de alteração de senha">
+    <label style="font-size:.7rem;font-weight:800;color:#30415a;display:block;margin-bottom:.3rem" for="senhaAtual">Senha atual</label>
+    <input id="senhaAtual" type="password" required autocomplete="current-password" style="width:100%;border:1.5px solid #d9e0e9;border-radius:10px;padding:.6rem .7rem;font:inherit;margin-bottom:.8rem">
+    <label style="font-size:.7rem;font-weight:800;color:#30415a;display:block;margin-bottom:.3rem" for="senhaNova">Nova senha</label>
+    <input id="senhaNova" type="password" required autocomplete="new-password" style="width:100%;border:1.5px solid #d9e0e9;border-radius:10px;padding:.6rem .7rem;font:inherit;margin-bottom:.35rem">
+    <small style="display:block;color:var(--muted-2);font-size:.66rem;margin-bottom:.8rem">Mínimo de 10 caracteres, com ao menos uma maiúscula, uma minúscula e um número.</small>
+    <label style="font-size:.7rem;font-weight:800;color:#30415a;display:block;margin-bottom:.3rem" for="senhaConfirma">Confirmar nova senha</label>
+    <input id="senhaConfirma" type="password" required autocomplete="new-password" style="width:100%;border:1.5px solid #d9e0e9;border-radius:10px;padding:.6rem .7rem;font:inherit">
+    <button type="submit" class="adm-btn solid" style="margin-top:1rem;padding:.7rem 1.4rem" id="senhaBtn">Salvar nova senha</button>
+  </form>
+</main>
+
+<script src="assets/admin.js"></script>
+<script src="assets/conta.js"></script>
+</body>
+</html>

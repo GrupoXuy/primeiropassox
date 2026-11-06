@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071a35">
+<title>Oportunidades internacionais | Primeiro Passo X</title>
+<meta name="description" content="Oportunidades de trabalho no exterior para brasileiros. Nenhuma vaga é publicada sem validação: país, requisitos, salário e condições sempre confirmados. Enquanto as vagas são atualizadas, cadastre seu perfil no banco de talentos.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Oportunidades internacionais | Primeiro Passo X">
+<meta property="og:description" content="Nenhuma vaga publicada sem validação dos dados. Enquanto as oportunidades são atualizadas, cadastre seu perfil no banco de talentos.">
+<meta property="og:image" content="https://primeiropassox.vercel.app/assets/img/og-image.jpg">
+<meta property="og:locale" content="pt_BR">
+<link rel="stylesheet" href="assets/css/style.css">
+  <link rel="canonical" href="https://primeiropassox.vercel.app/oportunidades.html">
+  <meta property="og:url" content="https://primeiropassox.vercel.app/oportunidades.html">
+  <meta property="og:image:alt" content="Primeiro Passo X — Conectando brasileiros a oportunidades de trabalho no exterior">
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<div class="topbar">Oportunidades Internacionais <b>&nbsp;•&nbsp; Novos caminhos &nbsp;•&nbsp; Novas conquistas</b></div>
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="Primeiro Passo X — página inicial">
+      <span class="brand-badge"><img src="assets/img/logo.jpeg" alt="Símbolo da Primeiro Passo X: globo azul e prateado com seta dourada ascendente e escadaria" width="52" height="52"></span>
+      <span class="brand-text"><strong>Primeiro Passo <em>X</em></strong><small>CONECTANDO VOCÊ A NOVAS OPORTUNIDADES</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav-links" id="menu-principal" aria-label="Navegação principal">
+      <a href="quem-somos.html">Quem somos</a>
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="oportunidades.html" aria-current="page">Oportunidades</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <a class="btn btn-gold nav-cta" href="cadastro.html">Cadastre seu perfil
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow light">Vagas internacionais</span>
+      <h1>Oportunidades que você pode confiar.</h1>
+      <p>Nenhuma vaga é publicada aqui sem validação dos dados: país, requisitos, salário (quando confirmado) e condições de contratação são verificados antes de qualquer anúncio.</p>
+    </div>
+  </section>
+
+  <section class="section section-navy" aria-labelledby="lista-titulo" style="padding-top:3.5rem">
+    <div class="container">
+      <h2 id="lista-titulo" class="sr-only" style="position:absolute;left:-9999px">Lista de oportunidades</h2>
+
+      <!-- Filtros (populados dinamicamente a partir das vagas validadas) -->
+      <form class="opp-filters" id="oppFiltersForm" aria-label="Filtrar oportunidades">
+        <div>
+          <label for="fPais">País</label>
+          <select id="fPais" name="fPais" disabled><option>Sem vagas publicadas</option></select>
+        </div>
+        <div>
+          <label for="fArea">Área</label>
+          <select id="fArea" name="fArea" disabled><option>Sem vagas publicadas</option></select>
+        </div>
+        <div>
+          <label for="fExperiencia">Experiência</label>
+          <select id="fExperiencia" name="fExperiencia" disabled><option>Sem vagas publicadas</option></select>
+        </div>
+        <div>
+          <label for="fIdioma">Idioma</label>
+          <select id="fIdioma" name="fIdioma" disabled><option>Sem vagas publicadas</option></select>
+        </div>
+        <div>
+          <label for="fTipo">Tipo</label>
+          <select id="fTipo" name="fTipo" disabled><option>Sem vagas publicadas</option></select>
+        </div>
+        <button type="button" class="opp-clear" id="clearFilters">Limpar filtros</button>
+      </form>
+      <p id="jobsResultsInfo" role="status" aria-live="polite" style="color:var(--silver-2);font-size:.78rem;min-height:1.2em;margin:-.4rem 0 1rem .2rem"></p>
+
+      <!-- Grade dinâmica de vagas -->
+      <div class="jobs-grid" id="jobsGrid" hidden></div>
+
+      <!-- Estado oficial: nenhuma vaga validada ainda -->
+      <div class="jobs-empty" id="jobsEmpty">
+        <div class="star" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2l2.9 6.6 7.1.6-5.4 4.7 1.6 6.9L12 17.2 5.8 20.8l1.6-6.9L2 9.2l7.1-.6L12 2z"/></svg>
+        </div>
+        <h3>Oportunidades em atualização</h3>
+        <p>Estamos validando as primeiras oportunidades internacionais para publicá-las com informações corretas e completas. Enquanto isso, a atitude mais inteligente é entrar para o nosso banco de talentos.</p>
+        <a class="btn btn-gold btn-lg" href="cadastro.html">Entrar no banco de talentos
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <p class="jobs-note">Nenhuma vaga fictícia será publicada. Cada oportunidade só aparece aqui após validação interna de país, requisitos, salário (quando confirmado), prazo e condições de contratação. O cadastro não garante vaga, entrevista, visto ou contratação.</p>
+      </div>
+
+      <!-- Como a publicação funciona -->
+      <div class="pub-explain" aria-label="Como funciona a publicação de vagas">
+        <div class="pub-step"><em>1</em><span><b>Vaga validada</b>A oportunidade só entra no nosso funil após confirmação da empresa empregadora.</span></div>
+        <div class="pub-step"><em>2</em><span><b>Dados completos</b>País, requisitos, idiomas, salário (quando confirmado) e prazo verificados.</span></div>
+        <div class="pub-step"><em>3</em><span><b>Publicação + candidatura</b>A vaga aparece aqui e você se candidata direto pelo banco de talentos.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-band" aria-label="Chamada para ação">
+    <div class="container">
+      <h2>SEJA O PRIMEIRO A SABER<br>QUANDO UMA VAGA ABRIR.</h2>
+      <p>Seu próximo passo pode mudar sua história.</p>
+      <a class="btn btn-navy btn-lg" href="cadastro.html">Quero cadastrar meu perfil
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="watermark" aria-hidden="true">PRIMEIRO PASSO X</div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html" aria-label="Primeiro Passo X — página inicial">
+          <span class="brand-badge"><img src="assets/img/logo.jpeg" alt="" width="64" height="64"></span>
+          <span class="brand-text"><strong>Primeiro Passo <em>X</em></strong><small>CONECTANDO VOCÊ A NOVAS OPORTUNIDADES</small></span>
+        </a>
+        <p>Recrutamento especializado em conectar brasileiros a oportunidades de trabalho no exterior.</p>
+        <p style="margin-top:.6rem">O cadastro não representa garantia de contratação, entrevista, visto ou aprovação.</p>
+      </div>
+      <nav aria-label="Institucional">
+        <h4>Institucional</h4>
+        <ul>
+          <li><a href="quem-somos.html">Quem somos</a></li>
+          <li><a href="como-funciona.html">Como funciona</a></li>
+          <li><a href="oportunidades.html">Oportunidades</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Banco de talentos">
+        <h4>Banco de talentos</h4>
+        <ul>
+          <li><a href="cadastro.html">Cadastre seu perfil</a></li>
+          <li><a href="cadastro.html#formulario">Formulário de interesse</a></li>
+          <li><a href="privacidade.html">Política de Privacidade</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Seus dados">
+        <h4>Seus dados · LGPD</h4>
+        <ul>
+          <li><a href="privacidade.html#seus-direitos">Seus direitos como titular</a></li>
+          <li><a href="privacidade.html#canal-lgpd">Canal de solicitações</a></li>
+          <li><a href="privacidade.html#versoes">Versões do documento</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Primeiro Passo X. Todos os direitos reservados.</span>
+      <span class="sig">Trabalhe. Viaje. Mude de vida.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/vagas-data.js"></script>
+<script src="assets/js/oportunidades.js"></script>
+<script src="assets/js/main.js"></script>
+</body>
+</html>

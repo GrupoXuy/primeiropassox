@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Candidatos | Painel — Primeiro Passo X</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+
+<header class="adm-top">
+  <div class="adm-top-inner">
+    <a class="adm-brand" href="/admin/"><img src="../assets/img/logo.jpeg" alt="" width="38" height="38"><span><b>Primeiro Passo X</b>Painel administrativo</span></a>
+    <nav class="adm-nav" aria-label="Navegação do painel">
+      <a href="/admin/">Dashboard</a>
+      <a href="/admin/candidatos.html" aria-current="page">Candidatos</a>
+      <a href="/admin/logs.html">Auditoria</a>
+    </nav>
+    <div class="adm-user"><span class="nome">Olá, <b id="adminNome">…</b></span><a class="adm-btn" href="/admin/conta.html">Conta</a><button class="adm-btn" id="logoutBtn" type="button">Sair</button></div>
+  </div>
+</header>
+
+<main class="adm-main">
+  <div class="adm-page-head">
+    <div>
+      <span class="eyebrow">Gestão de candidatos</span>
+      <h1>Candidatos</h1>
+      <p>Busque, filtre e abra o perfil completo de cada pessoa do banco de talentos.</p>
+    </div>
+    <button class="adm-btn solid" id="exportCsv" type="button">Exportar CSV</button>
+  </div>
+
+  <form class="adm-filters" id="filterForm" aria-label="Filtros de candidatos">
+    <input type="search" id="fQ" placeholder="Buscar por nome ou e-mail…" aria-label="Buscar por nome ou e-mail">
+    <select id="fPais" aria-label="País de residência"><option value="">Todos os países</option></select>
+    <select id="fArea" aria-label="Área profissional"><option value="">Todas as áreas</option></select>
+    <select id="fExperiencia" aria-label="Experiência">
+      <option value="">Toda experiência</option>
+      <option>Sem experiência profissional</option><option>Menos de 1 ano</option>
+      <option>1 a 3 anos</option><option>3 a 5 anos</option><option>Mais de 5 anos</option>
+    </select>
+    <select id="fIdioma" aria-label="Idioma / inglês">
+      <option value="">Todos os idiomas</option>
+      <option>Não falo</option><option>Básico</option><option>Intermediário</option><option>Avançado</option><option>Fluente</option>
+    </select>
+    <select id="fStatus" aria-label="Status">
+      <option value="">Todos os status</option>
+      <option value="novo">Novo cadastro</option><option value="analise">Em análise</option>
+      <option value="aprovado">Perfil aprovado</option><option value="processo">Em processo seletivo</option>
+      <option value="entrevista">Entrevista</option><option value="selecionado">Selecionado</option>
+      <option value="nao_selecionado">Não selecionado</option><option value="banco">Banco de talentos</option>
+    </select>
+    <button type="button" class="adm-btn" id="clearFilters" style="border-color:#d9e0e9;color:#31425a">Limpar</button>
+  </form>
+
+  <p class="adm-meta"><span id="resultInfo" role="status">Carregando…</span><span>Dados pessoais são confidenciais LGPD — trate-os com necessidade mínima.</span></p>
+
+  <div class="adm-table-wrap">
+    <table class="adm-table">
+      <thead><tr><th>Protocolo</th><th>Nome</th><th>Área</th><th>País</th><th>Experiência</th><th>Status</th><th>Cadastro</th><th></th></tr></thead>
+      <tbody id="rowsBody"><tr><td colspan="8" style="text-align:center;color:#75839a;padding:1.4rem">Carregando…</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="adm-pagination">
+    <button type="button" id="prevPage">← Anterior</button>
+    <span id="pageInfo">Página 1</span>
+    <button type="button" id="nextPage">Próxima →</button>
+  </div>
+</main>
+
+<script src="assets/admin.js"></script>
+<script src="assets/candidatos-list.js"></script>
+</body>
+</html>

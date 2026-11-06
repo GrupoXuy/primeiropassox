@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071a35">
+<title>Banco de talentos | Primeiro Passo X — Cadastre seu perfil</title>
+<meta name="description" content="Cadastre-se gratuitamente no banco de talentos da Primeiro Passo X e seja considerado para oportunidades de trabalho no exterior. Com ou sem experiência. Seus dados protegidos pela LGPD.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/img/favicon-64.png">
+<link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Banco de talentos | Primeiro Passo X">
+<meta property="og:description" content="Cadastre seu perfil para oportunidades internacionais — gratuito, com ou sem experiência. Dados protegidos pela LGPD.">
+<meta property="og:image" content="https://primeiropassox.vercel.app/assets/img/og-image.jpg">
+<meta property="og:locale" content="pt_BR">
+<link rel="stylesheet" href="assets/css/style.css">
+  <link rel="canonical" href="https://primeiropassox.vercel.app/cadastro.html">
+  <meta property="og:url" content="https://primeiropassox.vercel.app/cadastro.html">
+  <meta property="og:image:alt" content="Primeiro Passo X — Conectando brasileiros a oportunidades de trabalho no exterior">
+</head>
+<body>
+<a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+<div class="topbar">Oportunidades Internacionais <b>&nbsp;•&nbsp; Novos caminhos &nbsp;•&nbsp; Novas conquistas</b></div>
+<header class="header">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="Primeiro Passo X — página inicial">
+      <span class="brand-badge"><img src="assets/img/logo.jpeg" alt="Símbolo da Primeiro Passo X: globo azul e prateado com seta dourada ascendente e escadaria" width="52" height="52"></span>
+      <span class="brand-text"><strong>Primeiro Passo <em>X</em></strong><small>CONECTANDO VOCÊ A NOVAS OPORTUNIDADES</small></span>
+    </a>
+    <button class="menu-btn" aria-expanded="false" aria-controls="menu-principal" aria-label="Abrir menu">
+      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <nav class="nav-links" id="menu-principal" aria-label="Navegação principal">
+      <a href="quem-somos.html">Quem somos</a>
+      <a href="como-funciona.html">Como funciona</a>
+      <a href="oportunidades.html">Oportunidades</a>
+      <a href="contato.html">Contato</a>
+    </nav>
+    <a class="btn btn-gold nav-cta" href="#formulario">Cadastre seu perfil
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <section class="page-hero">
+    <div class="container">
+      <span class="eyebrow light">Banco de talentos</span>
+      <h1>O seu próximo passo começa com o seu perfil.</h1>
+      <p>Preencha seus dados com atenção e honestidade. Quando uma oportunidade validada for compatível com você, nós entramos em contato.</p>
+    </div>
+  </section>
+
+  <section class="section section-paper" style="padding-top:3.2rem" aria-labelledby="cadastro-titulo">
+    <div class="container form-layout">
+
+      <!-- ===== Painel lateral ===== -->
+      <aside class="form-intro">
+        <span class="eyebrow light">Banco de talentos</span>
+        <h2 id="cadastro-titulo">Cadastro gratuito,<br>sem compromisso.</h2>
+        <p><strong>Importante:</strong> enviar o cadastro não garante vaga, entrevista, visto ou contratação. As oportunidades serão avaliadas conforme requisitos específicos de cada uma.</p>
+        <ol class="intro-steps">
+          <li><em>1</em>Você preenche o formulário com calma (cerca de 5 minutos).</li>
+          <li><em>2</em>Analisamos seu perfil quando uma oportunidade for validada.</li>
+          <li><em>3</em>Se houver compatibilidade, você recebe todos os detalhes — e decide.</li>
+        </ol>
+        <div class="consent-meta">
+          <b>Consentimento LGPD</b><br>
+          Ao enviar, você autoriza o tratamento dos seus dados para análise de perfil e contato sobre oportunidades, nos termos da <a href="privacidade.html" style="color:var(--gold-2);text-decoration:underline">Política de Privacidade</a> — <strong>versão 1.1 · 06/11/2026</strong>. Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento.
+        </div>
+      </aside>
+
+      <!-- ===== Formulário ===== -->
+      <form class="form-card" id="formulario" aria-label="Formulário de cadastro no banco de talentos">
+        <div class="vaga-banner" id="vagaBanner" hidden style="margin:1.1rem 1.6rem 0;padding:.7rem .9rem;background:#eef3fb;border:1px solid #c9d8ee;border-radius:12px;font-size:.82rem;color:#1c3a63"></div>
+
+        <fieldset class="form-section">
+          <legend><span>1</span>Dados pessoais</legend>
+          <div class="form-grid">
+            <div class="field full">
+              <label for="nome">Nome completo <span class="req">*</span></label>
+              <input id="nome" name="nome" type="text" required autocomplete="name" autocapitalize="words" placeholder="Ex.: Maria da Silva Santos">
+              <span class="err">Informe nome e sobrenome.</span>
+            </div>
+            <div class="field">
+              <label for="nascimento">Data de nascimento <span class="req">*</span></label>
+              <input id="nascimento" name="nascimento" type="date" required autocomplete="bday" max="2026-12-31">
+              <span class="err">Informe uma data válida no passado.</span>
+            </div>
+            <div class="field">
+              <label for="nacionalidade">Nacionalidade <span class="req">*</span></label>
+              <input id="nacionalidade" name="nacionalidade" type="text" required value="Brasileira" autocomplete="country-name">
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="email">E-mail <span class="req">*</span></label>
+              <input id="email" name="email" type="email" required autocomplete="email" placeholder="voce@email.com" inputmode="email">
+              <span class="err">Informe um e-mail válido.</span>
+            </div>
+            <div class="field">
+              <label for="telefone">Telefone / WhatsApp <span class="req">*</span></label>
+              <input id="telefone" name="telefone" type="tel" required autocomplete="tel" placeholder="(11) 98765-4321 ou +55 11 98765-4321" inputmode="tel">
+              <span class="err">Informe ao menos 8 dígitos.</span>
+            </div>
+            <div class="field">
+              <label for="paisResidencia">País de residência <span class="req">*</span></label>
+              <select id="paisResidencia" name="paisResidencia" required>
+                <option value="">Selecione</option>
+                <option selected>Brasil</option>
+                <option>Portugal</option><option>Espanha</option><option>Itália</option>
+                <option>Alemanha</option><option>França</option><option>Reino Unido</option><option>Irlanda</option>
+                <option>Estados Unidos</option><option>Canadá</option>
+                <option>Argentina</option><option>Paraguai</option><option>Uruguai</option>
+                <option>Outro (informe nos comentários)</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="cidade">Cidade de residência <span class="req">*</span></label>
+              <input id="cidade" name="cidade" type="text" required autocomplete="address-level2" placeholder="Ex.: São Paulo">
+              <span class="err">Campo obrigatório.</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span>2</span>Perfil profissional</legend>
+          <div class="form-grid">
+            <div class="field">
+              <label for="experiencia">Experiência profissional <span class="req">*</span></label>
+              <select id="experiencia" name="experiencia" required>
+                <option value="">Selecione</option>
+                <option>Sem experiência profissional</option>
+                <option>Menos de 1 ano</option>
+                <option>1 a 3 anos</option>
+                <option>3 a 5 anos</option>
+                <option>Mais de 5 anos</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="area">Área de atuação / interesse <span class="req">*</span></label>
+              <select id="area" name="area" required>
+                <option value="">Selecione</option>
+                <option>Vendas / Comercial</option>
+                <option>Atendimento ao cliente</option>
+                <option>Hotelaria / Turismo</option>
+                <option>Restaurantes / Alimentação</option>
+                <option>Logística / Estoque</option>
+                <option>Construção / Manutenção</option>
+                <option>Indústria / Produção</option>
+                <option>Administrativo</option>
+                <option>Tecnologia</option>
+                <option>Saúde</option>
+                <option>Educação</option>
+                <option>Outra / Aberto a oportunidades</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="escolaridade">Escolaridade <span class="req">*</span></label>
+              <select id="escolaridade" name="escolaridade" required>
+                <option value="">Selecione</option>
+                <option>Ensino fundamental</option>
+                <option>Ensino médio completo</option>
+                <option>Técnico / Profissionalizante</option>
+                <option>Superior cursando</option>
+                <option>Superior completo</option>
+                <option>Pós-graduação / Mestrado / Doutorado</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="ingles">Nível de inglês <span class="req">*</span></label>
+              <select id="ingles" name="ingles" required>
+                <option value="">Selecione</option>
+                <option>Não falo</option>
+                <option>Básico</option>
+                <option>Intermediário</option>
+                <option>Avançado</option>
+                <option>Fluente</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field full">
+              <label for="idiomas">Idiomas e níveis <span class="req">*</span></label>
+              <input id="idiomas" name="idiomas" type="text" required placeholder="Ex.: português nativo; espanhol — intermediário; inglês — básico">
+              <span class="err">Informe os idiomas que você fala e seu nível.</span>
+            </div>
+            <div class="field full">
+              <label for="habilidades">Principais habilidades <span class="opt">(opcional)</span></label>
+              <input id="habilidades" name="habilidades" type="text" placeholder="Ex.: comunicação, trabalho em equipe, atendimento, noções de Excel">
+            </div>
+            <div class="field full">
+              <label for="historico">Histórico profissional <span class="opt">(opcional)</span></label>
+              <textarea id="historico" name="historico" placeholder="Empresa, cargo e período — ou escreva “Sem experiência”."></textarea>
+              <span class="hint">Sem experiência? Sem problema: este campo pode ficar em branco.</span>
+            </div>
+            <div class="field full">
+              <label for="linkedin">LinkedIn <span class="opt">(opcional)</span></label>
+              <input id="linkedin" name="linkedin" type="url" placeholder="https://www.linkedin.com/in/seu-perfil" inputmode="url">
+              <span class="err">Informe uma URL válida (https://…).</span>
+            </div>
+            <div class="field full" id="cvField">
+              <label for="cv">Currículo em PDF <span class="opt">(opcional — máx. 4 MB)</span></label>
+              <input id="cv" name="cv" type="file" accept="application/pdf,.pdf" aria-describedby="cvHint">
+              <span class="hint" id="cvHint">Armazenado com acesso restrito a administradores autorizados sob a LGPD. Você pode solicitar a exclusão (ou de todos os seus dados) a qualquer momento — veja a <a href="privacidade.html" target="_blank" rel="noopener" style="color:var(--gold-deep);font-weight:800">Política de Privacidade</a>.</span>
+              <span class="err">Envie um arquivo PDF válido de até 4 MB.</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span>3</span>Interesse internacional</legend>
+          <div class="form-grid">
+            <div class="field full" id="paisesField">
+              <span class="label" style="font-size:.72rem;font-weight:800;color:#30415a;letter-spacing:.02em;display:block;margin-bottom:.35rem">Países / regiões de interesse <span class="req">*</span></span>
+              <div class="chip-group" role="group" aria-label="Países ou regiões de interesse">
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="Europa"><span>Europa</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="América do Norte"><span>América do Norte</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="América do Sul"><span>América do Sul</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="Ásia"><span>Ásia</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="Oceania"><span>Oceania</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="Oriente Médio"><span>Oriente Médio</span></label>
+                <label class="chip"><input type="checkbox" name="paisesInteresse" value="Sem preferência"><span>Sem preferência</span></label>
+              </div>
+              <span class="err">Selecione ao menos uma opção.</span>
+            </div>
+            <div class="field">
+              <label for="disponibilidadeMudanca">Disponibilidade para mudança <span class="req">*</span></label>
+              <select id="disponibilidadeMudanca" name="disponibilidadeMudanca" required>
+                <option value="">Selecione</option>
+                <option>Imediata</option>
+                <option>Em até 3 meses</option>
+                <option>Em 3 a 6 meses</option>
+                <option>Mais de 6 meses</option>
+                <option>Depende das condições da oportunidade</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="disponibilidadeInicio">Disponibilidade para início <span class="req">*</span></label>
+              <select id="disponibilidadeInicio" name="disponibilidadeInicio" required>
+                <option value="">Selecione</option>
+                <option>Imediato</option>
+                <option>Até 30 dias</option>
+                <option>Até 60 dias</option>
+                <option>Até 90 dias</option>
+                <option>A combinar / depende da oportunidade</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="interesseVendas">Interesse em trabalhar com vendas <span class="req">*</span></label>
+              <select id="interesseVendas" name="interesseVendas" required>
+                <option value="">Selecione</option>
+                <option>Sim — tenho interesse</option>
+                <option>Aberto a avaliar a oportunidade</option>
+                <option>Não tenho interesse em vendas</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+            <div class="field">
+              <label for="interesseOutras">Interesse em outras áreas <span class="req">*</span></label>
+              <select id="interesseOutras" name="interesseOutras" required>
+                <option value="">Selecione</option>
+                <option>Sim — tenho interesse</option>
+                <option>Não tenho interesse</option>
+              </select>
+              <span class="err">Campo obrigatório.</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="form-section">
+          <legend><span>4</span>Consentimento e privacidade (LGPD)</legend>
+          <label class="check-row" for="lgpd">
+            <input type="checkbox" id="lgpd" name="lgpd" required>
+            <span>Li e concordo com a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> (versão 1.1 · 06/11/2026) e autorizo o uso dos meus dados <strong>exclusivamente para análise do meu perfil e contato sobre oportunidades</strong> da Primeiro Passo X, conforme a LGPD (Lei nº 13.709/2018). <span class="req">*</span></span>
+          </label>
+          <label class="check-row" for="contato">
+            <input type="checkbox" id="contato" name="contato" required>
+            <span>Autorizo o contato da Primeiro Passo X por <strong>e-mail, telefone e WhatsApp</strong>, inclusive para informações sobre etapas do processo seletivo. <span class="req">*</span></span>
+          </label>
+          <label class="check-row" for="novidades">
+            <input type="checkbox" id="novidades" name="novidades">
+            <span>Quero receber novidades e conteúdos da Primeiro Passo X (opcional — você pode cancelar quando quiser).</span>
+          </label>
+        </fieldset>
+
+        <div class="form-status" id="formStatus" role="status" aria-live="polite"></div>
+        <div class="form-footer">
+          <button type="button" class="btn btn-outline" id="downloadSummary">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 21h16"/></svg>
+            Baixar resumo do perfil (.txt)
+          </button>
+          <button type="submit" class="btn btn-navy">Enviar interesse
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+        <p class="fineprint"><strong>Transparência:</strong> ao enviar, seus dados são validados e armazenados com segurança (acesso restrito a administradores autorizados sob a LGPD). O consentimento fica registrado com data/hora e versão da política (v1.1). O botão “Baixar resumo do perfil” gera um .txt opcional com as suas respostas, salvo apenas neste dispositivo. Não solicitamos documentos sensíveis nesta etapa.</p>
+      </form>
+
+      <!-- Painel de confirmação pós-envio -->
+      <div class="form-card" id="cadastroSucesso" hidden style="padding:2.4rem 2rem;text-align:center" role="status" aria-live="polite">
+        <div style="width:70px;height:70px;border-radius:50%;background:#e8f7ee;display:grid;place-items:center;margin:0 auto 1.1rem">
+          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="#1e7d4f" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+        <span class="eyebrow" style="justify-content:center">Cadastro recebido</span>
+        <h2 style="color:var(--navy-800);letter-spacing:-.03em;margin:.6rem 0 .4rem;font-size:1.6rem">Bem-vinda(o) ao banco de talentos.</h2>
+        <p style="color:var(--muted);max-width:34rem;margin:0 auto .4rem">Seu protocolo é <strong id="sucessoProtocolo" style="color:var(--navy-800)">PPX-000000</strong>. Guarde-o: ele identifica o seu cadastro com a gente.</p>
+        <p style="color:var(--muted);max-width:34rem;margin:0 auto 1.2rem;font-size:.88rem">Analisamos perfis quando uma oportunidade validada é compatível. Não há garantia de vaga, entrevista, visto ou contratação — mas cada candidatura que a gente apresentar será clara sobre requisitos e condições.</p>
+        <div style="display:flex;gap:.6rem;justify-content:center;flex-wrap:wrap">
+          <a class="btn btn-navy" href="index.html">Voltar para o site</a>
+          <a class="btn btn-outline" href="como-funciona.html">Entender as próximas etapas</a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="watermark" aria-hidden="true">PRIMEIRO PASSO X</div>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="index.html" aria-label="Primeiro Passo X — página inicial">
+          <span class="brand-badge"><img src="assets/img/logo.jpeg" alt="" width="64" height="64"></span>
+          <span class="brand-text"><strong>Primeiro Passo <em>X</em></strong><small>CONECTANDO VOCÊ A NOVAS OPORTUNIDADES</small></span>
+        </a>
+        <p>Recrutamento especializado em conectar brasileiros a oportunidades de trabalho no exterior.</p>
+        <p style="margin-top:.6rem">O cadastro não representa garantia de contratação, entrevista, visto ou aprovação.</p>
+      </div>
+      <nav aria-label="Institucional">
+        <h4>Institucional</h4>
+        <ul>
+          <li><a href="quem-somos.html">Quem somos</a></li>
+          <li><a href="como-funciona.html">Como funciona</a></li>
+          <li><a href="oportunidades.html">Oportunidades</a></li>
+          <li><a href="contato.html">Contato</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Banco de talentos">
+        <h4>Banco de talentos</h4>
+        <ul>
+          <li><a href="cadastro.html">Cadastre seu perfil</a></li>
+          <li><a href="cadastro.html#formulario">Formulário de interesse</a></li>
+          <li><a href="privacidade.html">Política de Privacidade</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Seus dados">
+        <h4>Seus dados · LGPD</h4>
+        <ul>
+          <li><a href="privacidade.html#seus-direitos">Seus direitos como titular</a></li>
+          <li><a href="privacidade.html#canal-lgpd">Canal de solicitações</a></li>
+          <li><a href="privacidade.html#versoes">Versões do documento</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Primeiro Passo X. Todos os direitos reservados.</span>
+      <span class="sig">Trabalhe. Viaje. Mude de vida.</span>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="assets/js/cadastro.js"></script>
+</body>
+</html>

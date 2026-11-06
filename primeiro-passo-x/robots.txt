@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /painel/
+Sitemap: https://primeiropassox.vercel.app/sitemap.xml

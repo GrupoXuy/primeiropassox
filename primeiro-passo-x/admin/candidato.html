@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Perfil do candidato | Painel — Primeiro Passo X</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body>
+
+<header class="adm-top">
+  <div class="adm-top-inner">
+    <a class="adm-brand" href="/admin/"><img src="../assets/img/logo.jpeg" alt="" width="38" height="38"><span><b>Primeiro Passo X</b>Painel administrativo</span></a>
+    <nav class="adm-nav" aria-label="Navegação do painel">
+      <a href="/admin/">Dashboard</a>
+      <a href="/admin/candidatos.html" aria-current="page">Candidatos</a>
+      <a href="/admin/logs.html">Auditoria</a>
+    </nav>
+    <div class="adm-user"><span class="nome">Olá, <b id="adminNome">…</b></span><a class="adm-btn" href="/admin/conta.html">Conta</a><button class="adm-btn" id="logoutBtn" type="button">Sair</button></div>
+  </div>
+</header>
+
+<main class="adm-main" id="detailRoot" aria-busy="true">
+  <div class="adm-page-head">
+    <div>
+      <span class="eyebrow">Perfil do candidato · <span id="protocoloLabel">…</span></span>
+      <h1 id="candNome">Carregando…</h1>
+      <p id="candMeta">Cadastro em —</p>
+    </div>
+    <a class="adm-btn" href="/admin/candidatos.html" style="border-color:#d9e0e9;color:#31425a">← Voltar para a lista</a>
+  </div>
+
+  <div class="adm-detail-grid">
+    <div>
+      <div class="adm-panel">
+        <h2>Situação no processo</h2>
+        <div class="status-line">
+          <span id="statusBadge"></span>
+          <select class="select-status" id="statusSelect" aria-label="Alterar status"></select>
+          <button class="adm-btn solid" id="saveStatus" type="button">Salvar status</button>
+        </div>
+        <p class="adm-meta" style="margin:.6rem 0 0"><span id="consentInfo"></span></p>
+      </div>
+
+      <div class="adm-panel">
+        <h2>Dados pessoais</h2>
+        <dl class="adm-dl" id="dlPessoais"></dl>
+      </div>
+
+      <div class="adm-panel">
+        <h2>Perfil profissional</h2>
+        <dl class="adm-dl" id="dlProfissional"></dl>
+      </div>
+
+      <div class="adm-panel">
+        <h2>Interesse internacional</h2>
+        <dl class="adm-dl" id="dlInteresse"></dl>
+      </div>
+    </div>
+
+    <div>
+      <div class="adm-panel">
+        <h2>Currículo</h2>
+        <div id="cvBox">Carregando…</div>
+      </div>
+
+      <div class="adm-panel">
+        <h2>Observações internas</h2>
+        <p style="font-size:.72rem;color:var(--muted);margin:-.3rem 0 .6rem">Visíveis apenas para administradores. Não aparecem para o candidato.</p>
+        <form class="obs-form" id="obsForm">
+          <textarea id="obsTexto" placeholder="Escreva uma observação interna…" required aria-label="Nova observação"></textarea>
+          <button type="submit" class="adm-btn solid" style="align-self:flex-start">Adicionar</button>
+        </form>
+        <ul class="obs-list" id="obsList"></ul>
+      </div>
+
+      <div class="adm-panel">
+        <h2>Histórico de movimentações</h2>
+        <ol class="timeline" id="histList"></ol>
+      </div>
+
+      <div class="danger-zone">
+        <b>Excluir dados do candidato (LGPD)</b><br>
+        Apaga definitivamente o perfil, observações, histórico e o currículo enviado. Use somente para atender a solicitação de eliminação do titular ou conforme a política de retenção.
+        <div style="margin-top:.55rem"><button class="adm-btn danger" id="deleteBtn" type="button">Excluir definitivamente</button></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="assets/admin.js"></script>
+<script src="assets/candidato-detail.js"></script>
+</body>
+</html>
