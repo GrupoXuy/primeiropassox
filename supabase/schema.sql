@@ -112,7 +112,7 @@ create table if not exists public.candidaturas (
 
 /* ---------- atualizado_em automático ---------- */
 create or replace function public.set_atualizado_em()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = '' as $
 begin
   new.atualizado_em = now();
   return new;
@@ -213,3 +213,13 @@ alter table public.vagas enable row level security;
 alter table public.candidaturas enable row level security;
 
 commit;
+
+
+/* ---------- Bucket privado para currículos ---------- */
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('curriculos', 'curriculos', false, 4194304, array['application/pdf']::text[])
+on conflict (id) do update set
+  name = excluded.name,
+  public = false,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
