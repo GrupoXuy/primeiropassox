@@ -35,6 +35,9 @@ create table if not exists public.candidatos (
   cv_original_name text,
   status text not null default 'novo'
     check (status in ('novo','analise','aprovado','processo','entrevista','selecionado','nao_selecionado','banco')),
+  email_status text not null default 'pendente' check (email_status in ('pendente','enviado','falhou')),
+  email_enviado_em timestamptz,
+  email_erro text,
   consent_lgpd boolean not null default false,
   consent_versao text not null,
   consent_em timestamptz not null default now(),
@@ -75,6 +78,9 @@ create table if not exists public.admin_users (
   email text not null unique,
   senha_hash text not null,
   papel text not null default 'admin' check (papel = 'admin'),
+  setup_token_hash text,
+  setup_token_expires_at timestamptz,
+  senha_definida_em timestamptz,
   criado_em timestamptz not null default now()
 );
 
