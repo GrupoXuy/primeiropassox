@@ -11,7 +11,7 @@ const DISP_INICIO = ['Imediato', 'Até 30 dias', 'Até 60 dias', 'Até 90 dias',
 const INT_VENDAS = ['Sim — tenho interesse', 'Aberto a avaliar a oportunidade', 'Não tenho interesse em vendas'];
 const INT_OUTRAS = ['Sim — tenho interesse', 'Não tenho interesse'];
 const PAISES_OK = ['Europa', 'América do Norte', 'América do Sul', 'Ásia', 'Oceania', 'Oriente Médio', 'Sem preferência'];
-const VERSAO_CONSENTIMENTO = '1.1';
+const VERSAO_CONSENTIMENTO = '1.2';
 
 const str = (v, max = 500) => String(v == null ? '' : v).trim().slice(0, max);
 const emailOk = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e) && e.length <= 160;
