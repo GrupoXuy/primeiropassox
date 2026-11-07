@@ -18,8 +18,8 @@ form.addEventListener('submit', async (event) => {
   const senha = document.getElementById('senha').value;
   const confirmar = document.getElementById('confirmar').value;
   if (senha !== confirmar) return showError('As senhas não coincidem.');
-  if (senha.length < 10 || !/[a-z]/.test(senha) || !/[A-Z]/.test(senha) || !/[0-9]/.test(senha)) {
-    return showError('Use ao menos 10 caracteres, com maiúscula, minúscula e número.');
+  if (senha.length < 6) {
+    return showError('Use ao menos 6 caracteres.');
   }
   btn.disabled = true;
   btn.textContent = 'Salvando…';
