@@ -1,38 +1,37 @@
 /* =========================================================================
    BANCO DE VAGAS — Primeiro Passo X
-   -------------------------------------------------------------------------
-   ESTADO ATUAL: VAZIO. Nenhuma vaga foi publicada porque nenhuma
-   oportunidade foi validada ainda. O site exibe automaticamente o estado
-   "Oportunidades em atualização".
-
-   QUANDO UMA VAGA REAL FOR VALIDADA, adicione um objeto ao array VAGAS
-   seguindo o schema abaixo (todos os campos marcados com * são obrigatórios
-   — a publicação sem eles violaria a regra de "nenhuma vaga sem validação"):
-
-   {
-     id: 'vaga-001',                 // * único, estável (slug)
-     titulo: 'Consultor de Vendas',  // * título real da oportunidade
-     pais: 'Portugal',               // * país de destino
-     cidade: 'Lisboa',               // * cidade ou "A definir"
-     area: 'Vendas / Comercial',     // * mesma taxonomia do cadastro
-     tipo: 'CLT / Contrato local',   // * regime/tipo de contratação
-     experiencia: '1 a 3 anos',      // * 'Sem experiência' | 'Menos de 1 ano' | '1 a 3 anos' | '3 a 5 anos' | 'Mais de 5 anos'
-     idiomas: ['Português nativo', 'Inglês básico'], // * array de idiomas exigidos
-     salario: { valor: 1800, moeda: 'EUR', periodo: 'mês' } | null, // null quando não confirmado
-     beneficios: ['A definir'] | [], // confirmar antes de publicar
-     publicadaEm: '2026-11-20',      // * ISO 8601
-     prazo: '2026-12-20',            // * prazo final de candidatura (ISO 8601) ou null
-     descricao: '…',                 // * descrição real e verificada
-     requisitos: ['…', '…'],         // * requisitos reais e verificados
-     ativa: true                     // * false = pausada/encerrada (não exibida)
-   }
-
-   Nenhuma vaga será exibida se ativa !== true. Não preencha estes campos
-   com estimativas: publicar dados não confirmados quebra a confiança do
-   candidato e a regra de publicação da empresa.
+   Oportunidades publicadas após confirmação das condições informadas.
    ========================================================================= */
 'use strict';
 
-const VAGAS = [];
+const VAGAS = [
+  {
+    id: 'consultor-comercial-forex-montevideu',
+    titulo: 'Consultor(a) Comercial — Mercado Forex',
+    pais: 'Uruguai',
+    cidade: 'Montevidéu',
+    area: 'Vendas / Comercial',
+    tipo: 'Contrato local no Uruguai',
+    experiencia: 'Com ou sem experiência',
+    idiomas: ['Português'],
+    salario: { valor: 32000, moeda: 'UYU', periodo: 'mês' },
+    beneficios: [
+      'Capacitação profissional para a função',
+      'Passagem de viagem para mudança ao Uruguai',
+      'Hospedagem inclusa no pacote de mudança',
+      'Comissões em dólares conforme desempenho e política comercial'
+    ],
+    publicadaEm: '2026-11-07',
+    prazo: null,
+    descricao: 'Oportunidade para atuar na área comercial de uma empresa do segmento financeiro, com foco no mercado Forex, em Montevidéu, Uruguai. Buscamos pessoas com boa comunicação em português, postura profissional e interesse em desenvolver carreira em um ambiente internacional. A vaga está aberta a candidatos com ou sem experiência: a empresa oferece capacitação para o desempenho das atividades e orientação durante a adaptação à função. A remuneração é composta por salário-base de UYU 32.000,00 por mês, acrescido de comissões em dólares, conforme resultados e política comercial. Para apoiar a mudança ao país, o pacote inclui a viagem e hospedagem. A contratação será realizada sob regime local no Uruguai. As candidaturas permanecem abertas, sem prazo final previamente definido.',
+    requisitos: [
+      'Comunicação em português',
+      'Interesse em atuar na área comercial e no segmento financeiro',
+      'Disponibilidade para mudança e contratação local no Uruguai',
+      'Experiência profissional não obrigatória; haverá capacitação para a função'
+    ],
+    ativa: true
+  }
+];
 
 window.VAGAS = VAGAS;
