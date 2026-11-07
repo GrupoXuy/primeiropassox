@@ -115,37 +115,17 @@ app.post('/admin/api/primeiro-acesso',
   requireFetchHeader,
   rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Muitas tentativas. Aguarde 15 minutos.' }),
   asyncRoute(async (req, res) => {
-    const token = String((req.body || {}).token || '').trim();
-    const senha = String((req.body || {}).senha || '');
-    if (!token || token.length < 32) return res.status(400).json({ ok: false, error: 'Link de primeiro acesso inválido ou expirado.' });
-    if (senha.length < 6) {
-      return res.status(400).json({ ok: false, error: 'A senha deve ter ao menos 6 caracteres.' });
-    }
-    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
-    const now = new Date().toISOString();
-    const { data: user, error } = await supabase.from('admin_users')
-      .update({
-        senha_hash: bcrypt.hashSync(senha, 12),
-        setup_token_hash: null,
-        setup_token_expires_at: null,
-        senha_definida_em: now
-      })
-      .eq('email', 'primeiropassorecrutamento@gmail.com')
-      .eq('setup_token_hash', tokenHash)
-      .gt('setup_token_expires_at', now)
-      .select('id, nome, email')
-      .maybeSingle();
-    if (error) {
-      console.error('[primeiro acesso] falha ao definir senha:', error.message);
-      return res.status(500).json({ ok: false, error: 'Não foi possível concluir a configuração. Tente novamente.' });
-    }
-    if (!user) return res.status(400).json({ ok: false, error: 'Link de primeiro acesso inválido, expirado ou já utilizado.' });
-    await logAdmin({ adminId: user.id, acao: 'primeiro_acesso_concluido', detalhes: 'Senha inicial definida', ip: clientIp(req) });
+    const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 160);
+    const fail = () => res.status(401).json({ ok: false, error: 'Não foi possível iniciar o acesso inicial. Confira o e-mail administrativo ou tente novamente.' });
+    if (email !== 'primeiropassorecrutamento@gmail.com') return fail();
+    const user = await getAdminByEmail(email);
+    /* O acesso sem senha existe somente até a senha inicial ser definida. */
+    if (!user || user.senha_definida_em) return fail();
+    await logAdmin({ adminId: user.id, acao: 'acesso_inicial_painel', detalhes: 'Acesso inicial para configuração da senha', ip: clientIp(req) });
     res.set('Set-Cookie', createSessionCookie(user));
-    res.json({ ok: true, nome: user.nome, email: user.email });
+    res.json({ ok: true, setupRequired: true, nome: user.nome, email: user.email });
   })
 );
-
 app.post('/admin/api/login',
   requireFetchHeader,
   rateLimit({ windowMs: 5 * 60 * 1000, max: 5, message: 'Muitas tentativas de login. Aguarde 5 minutos.' }),
@@ -155,7 +135,7 @@ app.post('/admin/api/login',
     const fail = () => res.status(401).json({ ok: false, error: 'E-mail ou senha incorretos.' });
     if (!email || !senha) return fail();
     const user = await getAdminByEmail(email);
-    if (!user || !bcrypt.compareSync(senha, user.senha_hash)) return fail();
+    if (!user || !user.senha_definida_em || !bcrypt.compareSync(senha, user.senha_hash)) return fail();
     await logAdmin({ adminId: user.id, acao: 'login', detalhes: 'Login administrativo', ip: clientIp(req) });
     res.set('Set-Cookie', createSessionCookie(user));
     res.json({ ok: true, nome: user.nome, email: user.email });
@@ -168,7 +148,7 @@ app.post('/admin/api/logout', requireFetchHeader, requireAdminApi, asyncRoute(as
   res.json({ ok: true });
 }));
 
-app.get('/admin/api/me', requireAdminApi, (req, res) => res.json({ ok: true, nome: req.admin.nome, email: req.admin.email }));
+app.get('/admin/api/me', requireAdminApi, (req, res) => res.json({ ok: true, nome: req.admin.nome, email: req.admin.email, needsPasswordSetup: Boolean(req.admin.needsPasswordSetup) }));
 
 /* ============================================================
    API ADMINISTRATIVA — dados
@@ -284,7 +264,9 @@ app.post('/admin/api/senha', requireFetchHeader, requireAdminApi, asyncRoute(asy
     return res.status(400).json({ ok: false, error: 'A nova senha deve ter ao menos 6 caracteres.' });
   }
   const user = await getAdminById(req.admin.id);
-  if (!user || !bcrypt.compareSync(atualStr, user.senha_hash)) {
+  if (!user) return res.status(401).json({ ok: false, error: 'Sessão administrativa inválida.' });
+  /* No primeiro acesso, ainda não existe senha confirmada: permite criar a primeira. */
+  if (user.senha_definida_em && !bcrypt.compareSync(atualStr, user.senha_hash)) {
     return res.status(401).json({ ok: false, error: 'Senha atual incorreta.' });
   }
   await updateAdminSenha(user.id, bcrypt.hashSync(novaStr, 12));
