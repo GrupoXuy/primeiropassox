@@ -117,10 +117,11 @@ app.post('/admin/api/primeiro-acesso',
   asyncRoute(async (req, res) => {
     const email = String((req.body || {}).email || '').trim().toLowerCase().slice(0, 160);
     const fail = () => res.status(401).json({ ok: false, error: 'Não foi possível iniciar o acesso inicial. Confira o e-mail administrativo ou tente novamente.' });
-    if (email !== 'primeiropassorecrutamento@gmail.com') return fail();
+    if (email !== 'primeiropassox@gmail.com') return fail();
     const user = await getAdminByEmail(email);
     /* O acesso sem senha existe somente até a senha inicial ser definida. */
-    if (!user || user.senha_definida_em) return fail();
+    if (!user) return fail();
+    if (user.senha_definida_em) return res.status(409).json({ ok: false, code: 'SETUP_ALREADY_COMPLETE', error: 'A senha desta conta já foi configurada. Informe sua senha para entrar.' });
     await logAdmin({ adminId: user.id, acao: 'acesso_inicial_painel', detalhes: 'Acesso inicial para configuração da senha', ip: clientIp(req) });
     res.set('Set-Cookie', createSessionCookie(user));
     res.json({ ok: true, setupRequired: true, nome: user.nome, email: user.email });
