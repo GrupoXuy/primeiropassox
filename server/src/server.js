@@ -118,8 +118,8 @@ app.post('/admin/api/primeiro-acesso',
     const token = String((req.body || {}).token || '').trim();
     const senha = String((req.body || {}).senha || '');
     if (!token || token.length < 32) return res.status(400).json({ ok: false, error: 'Link de primeiro acesso inválido ou expirado.' });
-    if (senha.length < 10 || !/[a-z]/.test(senha) || !/[A-Z]/.test(senha) || !/[0-9]/.test(senha)) {
-      return res.status(400).json({ ok: false, error: 'A senha deve ter ao menos 10 caracteres, com maiúscula, minúscula e número.' });
+    if (senha.length < 6) {
+      return res.status(400).json({ ok: false, error: 'A senha deve ter ao menos 6 caracteres.' });
     }
     const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
     const now = new Date().toISOString();
@@ -280,8 +280,8 @@ app.post('/admin/api/senha', requireFetchHeader, requireAdminApi, asyncRoute(asy
   const { atual, nova } = req.body || {};
   const atualStr = String(atual || '');
   const novaStr = String(nova || '');
-  if (novaStr.length < 10 || !/[a-z]/.test(novaStr) || !/[A-Z]/.test(novaStr) || !/[0-9]/.test(novaStr)) {
-    return res.status(400).json({ ok: false, error: 'A nova senha deve ter ao menos 10 caracteres, com maiúscula, minúscula e número.' });
+  if (novaStr.length < 6) {
+    return res.status(400).json({ ok: false, error: 'A nova senha deve ter ao menos 6 caracteres.' });
   }
   const user = await getAdminById(req.admin.id);
   if (!user || !bcrypt.compareSync(atualStr, user.senha_hash)) {
