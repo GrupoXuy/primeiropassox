@@ -270,6 +270,7 @@ app.post('/admin/api/senha', requireFetchHeader, requireAdminApi, asyncRoute(asy
     return res.status(401).json({ ok: false, error: 'Senha atual incorreta.' });
   }
   await updateAdminSenha(user.id, bcrypt.hashSync(novaStr, 12));
+  res.set('Set-Cookie', createSessionCookie({ ...user, senha_definida_em: new Date().toISOString() }));
   await logAdmin({ adminId: req.admin.id, acao: 'senha_alterada', detalhes: 'Senha administrativa alterada', ip: clientIp(req) });
   res.json({ ok: true });
 }));
