@@ -64,6 +64,12 @@ async function initHeader() {
   if (nomeEl) nomeEl.textContent = data.nome;
   const emailEl = document.getElementById('adminEmail');
   if (emailEl) emailEl.textContent = data.email;
+  if (data.needsPasswordSetup) {
+    const currentGroup = document.getElementById('currentPasswordGroup');
+    const currentInput = document.getElementById('senhaAtual');
+    if (currentGroup) currentGroup.hidden = true;
+    if (currentInput) currentInput.required = false;
+  }
   const logoutBtn = document.getElementById('logoutBtn');
   if (logoutBtn) logoutBtn.addEventListener('click', async () => {
     await api('/admin/api/logout', { method: 'POST' });
