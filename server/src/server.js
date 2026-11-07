@@ -9,7 +9,7 @@ const express = require('express');
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
 
-const { STATUS, ensureStorage } = require('./db');
+const { supabase, STATUS, ensureStorage } = require('./db');
 const {
   protocol, cadastrarCandidato, getDashboard, getFiltrosDistintos,
   listCandidatos, listTodosCandidatos, getCandidato, getDetalhes,
@@ -111,6 +111,41 @@ app.post('/api/candidatos',
 /* ============================================================
    API ADMINISTRATIVA — autenticação
    ============================================================ */
+app.post('/admin/api/primeiro-acesso',
+  requireFetchHeader,
+  rateLimit({ windowMs: 15 * 60 * 1000, max: 5, message: 'Muitas tentativas. Aguarde 15 minutos.' }),
+  asyncRoute(async (req, res) => {
+    const token = String((req.body || {}).token || '').trim();
+    const senha = String((req.body || {}).senha || '');
+    if (!token || token.length < 32) return res.status(400).json({ ok: false, error: 'Link de primeiro acesso inválido ou expirado.' });
+    if (senha.length < 10 || !/[a-z]/.test(senha) || !/[A-Z]/.test(senha) || !/[0-9]/.test(senha)) {
+      return res.status(400).json({ ok: false, error: 'A senha deve ter ao menos 10 caracteres, com maiúscula, minúscula e número.' });
+    }
+    const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+    const now = new Date().toISOString();
+    const { data: user, error } = await supabase.from('admin_users')
+      .update({
+        senha_hash: bcrypt.hashSync(senha, 12),
+        setup_token_hash: null,
+        setup_token_expires_at: null,
+        senha_definida_em: now
+      })
+      .eq('email', 'primeiropassorecrutamento@gmail.com')
+      .eq('setup_token_hash', tokenHash)
+      .gt('setup_token_expires_at', now)
+      .select('id, nome, email')
+      .maybeSingle();
+    if (error) {
+      console.error('[primeiro acesso] falha ao definir senha:', error.message);
+      return res.status(500).json({ ok: false, error: 'Não foi possível concluir a configuração. Tente novamente.' });
+    }
+    if (!user) return res.status(400).json({ ok: false, error: 'Link de primeiro acesso inválido, expirado ou já utilizado.' });
+    await logAdmin({ adminId: user.id, acao: 'primeiro_acesso_concluido', detalhes: 'Senha inicial definida', ip: clientIp(req) });
+    res.set('Set-Cookie', createSessionCookie(user));
+    res.json({ ok: true, nome: user.nome, email: user.email });
+  })
+);
+
 app.post('/admin/api/login',
   requireFetchHeader,
   rateLimit({ windowMs: 5 * 60 * 1000, max: 5, message: 'Muitas tentativas de login. Aguarde 5 minutos.' }),
@@ -266,7 +301,7 @@ app.get('/admin/api/logs', requireAdminApi, asyncRoute(async (req, res) => {
    ============================================================ */
 app.use('/admin', (req, res, next) => {
   /* Arquivos públicos do login: a própria página e os assets compartilhados */
-  if (req.path === '/login.html' || req.path.startsWith('/assets/')) return next();
+  if (req.path === '/login.html' || req.path === '/primeiro-acesso.html' || req.path.startsWith('/assets/')) return next();
   return requireAdminPage(req, res, next);
 });
 

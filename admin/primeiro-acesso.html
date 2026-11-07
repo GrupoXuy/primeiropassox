@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Primeiro acesso | Primeiro Passo X</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="stylesheet" href="assets/admin.css">
+</head>
+<body class="login-page">
+<main class="login-card" aria-labelledby="setup-title">
+  <img src="../assets/img/logo.jpeg" alt="Primeiro Passo X" width="88" height="88">
+  <span class="eyebrow" style="font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:#8a6a2f;font-weight:800">Configuração segura</span>
+  <h1 id="setup-title">Crie sua senha de administrador</h1>
+  <p>Defina uma senha pessoal para ativar o acesso ao painel administrativo do Primeiro Passo X.</p>
+  <form id="setupForm" novalidate>
+    <label for="senha">Nova senha</label>
+    <input id="senha" type="password" autocomplete="new-password" minlength="10" required placeholder="Mínimo de 10 caracteres">
+    <label for="confirmar">Confirmar senha</label>
+    <input id="confirmar" type="password" autocomplete="new-password" minlength="10" required placeholder="Digite a senha novamente">
+    <p style="font-size:.68rem;text-align:left;margin:.55rem 0 0">Use pelo menos 10 caracteres, incluindo uma letra maiúscula, uma minúscula e um número.</p>
+    <div class="login-error" id="setupError" role="alert"></div>
+    <button type="submit" class="adm-btn solid" style="width:100%;justify-content:center;padding:.75rem;font-size:.9rem;margin-top:1.1rem" id="setupBtn">Salvar senha e acessar</button>
+  </form>
+  <p class="login-note">Este link é individual, temporário e só pode ser utilizado uma vez.</p>
+  <p class="login-note"><a href="../index.html" style="color:#8a6a2f;font-weight:700">← Voltar para o site</a></p>
+</main>
+<script src="assets/primeiro-acesso.js"></script>
+</body>
+</html>
