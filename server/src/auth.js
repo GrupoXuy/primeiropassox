@@ -35,7 +35,7 @@ const sign = (payloadB64) => crypto.createHmac('sha256', SECRET).update(payloadB
 
 function createSessionCookie(user) {
   const exp = Date.now() + SESSION_HOURS * 3600 * 1000;
-  const payload = b64url(JSON.stringify({ sub: user.id, nome: user.nome, email: user.email, exp }));
+  const payload = b64url(JSON.stringify({ sub: user.id, nome: user.nome, email: user.email, needsPasswordSetup: !user.senha_definida_em, exp }));
   const value = `${payload}.${sign(payload)}`;
   const attrs = [
     `${COOKIE_NAME}=${value}`,
@@ -77,7 +77,7 @@ function getAdminFromRequest(req) {
     const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
     if (!data.exp || Date.now() > data.exp) return null;
     if (!Number.isInteger(data.sub)) return null;
-    return { id: data.sub, nome: data.nome, email: data.email };
+    return { id: data.sub, nome: data.nome, email: data.email, needsPasswordSetup: Boolean(data.needsPasswordSetup) };
   } catch (_) {
     return null;
   }
@@ -90,6 +90,7 @@ function requireAdminPage(req, res, next) {
     const nextUrl = encodeURIComponent(req.originalUrl || '/admin/');
     return res.redirect(302, `/admin/login.html?next=${nextUrl}`);
   }
+  if (admin.needsPasswordSetup && req.path !== '/conta.html') return res.redirect(302, '/admin/conta.html');
   req.admin = admin;
   next();
 }
@@ -98,6 +99,9 @@ function requireAdminPage(req, res, next) {
 function requireAdminApi(req, res, next) {
   const admin = getAdminFromRequest(req);
   if (!admin) return res.status(401).json({ ok: false, error: 'Não autenticado.' });
+  if (admin.needsPasswordSetup && !['/admin/api/me', '/admin/api/senha', '/admin/api/logout'].includes(req.path)) {
+    return res.status(403).json({ ok: false, error: 'Defina sua senha para liberar o painel administrativo.', setupRequired: true });
+  }
   req.admin = admin;
   next();
 }
