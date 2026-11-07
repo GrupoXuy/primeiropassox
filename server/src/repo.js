@@ -196,13 +196,13 @@ async function getCvMeta(id) {
 
 /* ---------- Admins e logs ---------- */
 async function getAdminByEmail(email) {
-  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash').eq('email', email).maybeSingle();
+  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash, senha_definida_em').eq('email', email).maybeSingle();
   if (error) throw new Error('[admin por email] ' + error.message);
   return data || null;
 }
 
 async function getAdminById(id) {
-  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash').eq('id', id).maybeSingle();
+  const { data, error } = await supabase.from('admin_users').select('id, nome, email, senha_hash, senha_definida_em').eq('id', id).maybeSingle();
   if (error) throw new Error('[admin por id] ' + error.message);
   return data || null;
 }
@@ -215,7 +215,7 @@ async function getAdminEmailsByIds(ids) {
 }
 
 async function updateAdminSenha(id, senhaHash) {
-  const { error } = await supabase.from('admin_users').update({ senha_hash: senhaHash }).eq('id', id);
+  const { error } = await supabase.from('admin_users').update({ senha_hash: senhaHash, senha_definida_em: new Date().toISOString(), setup_token_hash: null, setup_token_expires_at: null }).eq('id', id);
   if (error) throw new Error('[admin senha] ' + error.message);
 }
 
