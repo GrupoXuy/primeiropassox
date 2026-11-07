@@ -11,8 +11,9 @@ form.addEventListener('submit', async (e) => {
   const { data } = await api('/admin/api/senha', { method: 'POST', body: { atual, nova } });
   btn.disabled = false;
   if (data && data.ok) {
-    toast('Senha alterada com sucesso.', 'ok');
+    toast('Senha definida com sucesso. Liberando o painel…', 'ok');
     form.reset();
+    window.location.href = '/admin/';
   } else {
     toast((data && data.error) || 'Não foi possível alterar a senha.', 'err');
   }
