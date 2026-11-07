@@ -29,13 +29,13 @@ form.addEventListener('submit', async (e) => {
     });
     const data = await res.json().catch(() => null);
     if (!res.ok || !data || !data.ok) {
-      if (!passwordMode && res.status === 401) {
+      if (!passwordMode && data && data.code === 'SETUP_ALREADY_COMPLETE') {
         passwordMode = true;
         senhaGroup.hidden = false;
         document.getElementById('senha').required = true;
         btn.textContent = 'Entrar';
         document.getElementById('senha').focus();
-        showError('A senha desta conta já foi configurada. Informe sua senha para entrar.');
+        showError(data.error || 'A senha desta conta já foi configurada. Informe sua senha para entrar.');
       } else {
         showError((data && data.error) || 'Não foi possível entrar. Tente novamente.');
       }
